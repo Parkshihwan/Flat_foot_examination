@@ -1,5 +1,3 @@
-# train.py (이미지 전용 평발 판별용)
-
 import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
@@ -122,5 +120,6 @@ test_image = os.path.join(test_dir, "sample.jpg")
 model.load_state_dict(torch.load(save_path, map_location=device))
 result = predict_flat_foot(model, test_image)
 print(f"이미지 '{os.path.basename(test_image)}' 판별 결과: {result}")
+
 
 
