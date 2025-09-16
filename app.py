@@ -1,31 +1,26 @@
-#C:\Users\박시환\AppData\Local\Programs\Python\Python313\python.exe -m streamlit run app.py
-
 import streamlit as st
 import torch
 from torchvision import models, transforms
 from PIL import Image
 import os
 
-# ==========================
-# 1. 설정
-# ==========================
-data_dir = r"C:\Users\박시환\OneDrive - Testworks\바탕 화면\Flat_foot_examination\data"
+_____________________ 설 정 _____________________
+
+data_dir = r"C:\Users\your desktop dir"
 model_path = os.path.join(data_dir, "best_flat_foot_model.pth")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 img_size = 224
 
-# ==========================
-# 2. 모델 로드
-# ==========================
+_____________________ 모 델 로 드 _____________________
+
 model = models.resnet18(pretrained=False)
-model.fc = torch.nn.Linear(model.fc.in_features, 2)  # 클래스 수
+model.fc = torch.nn.Linear(model.fc.in_features, 2) 
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()
 
-# ==========================
-# 3. Streamlit UI
-# ==========================
+_____________________ U I _____________________
+
 st.set_page_config(page_title="평발 판별기", layout="centered")
 st.title("👣 이미지 기반 평발 판별기")
 st.write("이미지를 업로드하면 평발 여부를 판별합니다.")
@@ -54,4 +49,5 @@ if uploaded_file is not None:
   
     classes = ["normal", "flat_foot"]
     st.success(f"✅ 판별 결과: {classes[pred]}")
+
 
