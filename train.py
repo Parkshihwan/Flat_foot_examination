@@ -99,7 +99,7 @@ for epoch in range(num_epochs):
 print(f"\n최고 검증 정확도: {best_val_acc:.4f}")
 print(f"모델 저장 완료: {save_path}")
 
-_____________________ 새 이 미 지 판 별별 _____________________
+_____________________ 새 이 미 지 판 별 _____________________
 
 def predict_flat_foot(model, image_path):
     model.eval()
@@ -122,4 +122,5 @@ test_image = os.path.join(test_dir, "sample.jpg")
 model.load_state_dict(torch.load(save_path, map_location=device))
 result = predict_flat_foot(model, test_image)
 print(f"이미지 '{os.path.basename(test_image)}' 판별 결과: {result}")
+
 
