@@ -7,10 +7,10 @@ from torchvision import datasets, transforms, models
 from PIL import Image
 import os
 
-# ==========================
-# 1. 설정
-# ==========================
-data_dir = r"C:\Users\박시환\OneDrive - Testworks\바탕 화면\Flat_foot_examination\data"
+
+_____________________ 설 정 _____________________
+
+data_dir = r"C:\Users\your desktop dir"
 train_dir = os.path.join(data_dir, "train")
 val_dir = os.path.join(data_dir, "val")
 test_dir = os.path.join(data_dir, "test")
@@ -19,12 +19,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 batch_size = 32
 num_epochs = 15
 img_size = 224
-num_workers = 0  # Windows 환경 안정화
+num_workers = 0 
 save_path = os.path.join(data_dir, "best_flat_foot_model.pth")
 
-# ==========================
-# 2. 데이터셋 & 전처리
-# ==========================
+_____________________ 전 처 리 _____________________
+
 transform_train = transforms.Compose([
     transforms.Resize((img_size, img_size)),
     transforms.RandomHorizontalFlip(),
@@ -48,19 +47,17 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True,
 val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False,
                         num_workers=num_workers, pin_memory=True)
 
-# ==========================
-# 3. 모델 설정
-# ==========================
+_____________________ 모 델 설 정 _____________________
+
 model = models.resnet18(pretrained=True)
-model.fc = nn.Linear(model.fc.in_features, len(train_dataset.classes))  # 클래스 수 자동 설정
+model.fc = nn.Linear(model.fc.in_features, len(train_dataset.classes))
 model = model.to(device)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=1e-4)
 
-# ==========================
-# 4. 학습 루프
-# ==========================
+_____________________ 학 습 루 프 _____________________
+
 best_val_acc = 0.0
 for epoch in range(num_epochs):
     model.train()
@@ -81,7 +78,7 @@ for epoch in range(num_epochs):
     epoch_loss = running_loss / len(train_dataset)
     epoch_acc = running_corrects / len(train_dataset)
 
-    # 검증
+    
     model.eval()
     val_corrects = 0
     with torch.no_grad():
@@ -102,9 +99,8 @@ for epoch in range(num_epochs):
 print(f"\n최고 검증 정확도: {best_val_acc:.4f}")
 print(f"모델 저장 완료: {save_path}")
 
-# ==========================
-# 5. 새 이미지 평발 판별 함수
-# ==========================
+_____________________ 새 이 미 지 판 별별 _____________________
+
 def predict_flat_foot(model, image_path):
     model.eval()
     img = Image.open(image_path).convert('RGB')
@@ -120,10 +116,10 @@ def predict_flat_foot(model, image_path):
         pred = torch.argmax(output, dim=1).item()
     return train_dataset.classes[pred]
 
-# ==========================
-# 6. 테스트 예시
-# ==========================
+_____________________ 테 스 트 예 시 _____________________
+
 test_image = os.path.join(test_dir, "sample.jpg")
 model.load_state_dict(torch.load(save_path, map_location=device))
 result = predict_flat_foot(model, test_image)
 print(f"이미지 '{os.path.basename(test_image)}' 판별 결과: {result}")
+
