@@ -48,6 +48,7 @@ if uploaded_file is not None:
 
   
     classes = ["normal", "flat_foot"]
-    st.success(f"✅ 판별 결과: {classes[pred]}")
+    st.success(f"판별 결과: {classes[pred]}")
+
 
 
