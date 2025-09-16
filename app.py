@@ -33,11 +33,11 @@ st.write("이미지를 업로드하면 평발 여부를 판별합니다.")
 uploaded_file = st.file_uploader("이미지 선택", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    # 이미지 표시
+   
     image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="업로드된 이미지", use_column_width=True)
 
-    # 전처리
+   
     transform = transforms.Compose([
         transforms.Resize((img_size, img_size)),
         transforms.ToTensor(),
@@ -46,11 +46,12 @@ if uploaded_file is not None:
     ])
     inp = transform(image).unsqueeze(0).to(device)
 
-    # 예측
+  
     with torch.no_grad():
         output = model(inp)
         pred = torch.argmax(output, dim=1).item()
 
-    # 결과 표시
+  
     classes = ["normal", "flat_foot"]
     st.success(f"✅ 판별 결과: {classes[pred]}")
+
